@@ -30,6 +30,7 @@ extensions = {
     ".pyc": "python",
     ".vbs": "vbs",
     ".msi": "msi",
+    ".ps1": "ps1",
 }
 
 def choose_package(file_type, file_name):
