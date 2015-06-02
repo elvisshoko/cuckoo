@@ -2,12 +2,47 @@
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
+import os.path
+
+extensions = {
+    ".cpl": "cpl",
+    ".dll": "dll",
+    ".exe": "exe",
+    ".pdf": "pdf",
+    ".doc": "doc",
+    ".docx": "doc",
+    ".rtf": "doc",
+    ".xls": "xls",
+    ".xlsx": "xls",
+    ".ppt": "ppt",
+    ".pptx": "ppt",
+    ".pps": "ppt",
+    ".ppsx": "ppt",
+    ".pptm": "ppt",
+    ".potm": "ppt",
+    ".potx": "ppt",
+    ".ppsm": "ppt",
+    ".htm": "html",
+    ".html": "html",
+    ".jar": "jar",
+    ".zip": "zip",
+    ".py": "python",
+    ".pyc": "python",
+    ".vbs": "vbs",
+    ".msi": "msi",
+}
+
 def choose_package(file_type, file_name):
     """Choose analysis package due to file type and file extension.
     @param file_type: file type.
     @param file_name: file name.
     @return: package name or None.
     """
+    _, ext = os.path.splitext(file_name)
+
+    if ext in extensions:
+        return extensions[ext]
+
     if not file_type:
         return None
 
@@ -20,31 +55,22 @@ def choose_package(file_type, file_name):
             return "dll"
     elif "PE32" in file_type or "MS-DOS" in file_type:
         return "exe"
-    elif "PDF" in file_type or file_name.endswith(".pdf"):
+    elif "PDF" in file_type:
         return "pdf"
     elif "Rich Text Format" in file_type or \
             "Microsoft Word" in file_type or \
-            "Microsoft Office Word" in file_type or \
-            file_name.endswith((".doc", ".docx", ".rtf")):
+            "Microsoft Office Word" in file_type:
         return "doc"
     elif "Microsoft Office Excel" in file_type or \
-            "Microsoft Excel" in file_type or \
-            file_name.endswith((".xls", ".xlsx")):
+            "Microsoft Excel" in file_type:
         return "xls"
-    elif "Microsoft PowerPoint" in file_type or \
-            file_name.endswith((".ppt", ".pptx", ".pps", ".ppsx", ".pptm", ".potm", ".potx", ".ppsm")):
+    elif "Microsoft PowerPoint" in file_type:
         return "ppt"
-    elif "HTML" in file_type or file_name.endswith((".htm", ".html")):
+    elif "HTML" in file_type:
         return "html"
-    elif file_name.endswith(".jar"):
-        return "jar"
     elif "Zip" in file_type:
         return "zip"
-    elif file_name.endswith((".py", ".pyc")) or "Python script" in file_type:
+    elif "Python script" in file_type:
         return "python"
-    elif file_name.endswith(".vbs"):
-        return "vbs"
-    elif file_name.endswith(".msi"):
-        return "msi"
     else:
         return "generic"
